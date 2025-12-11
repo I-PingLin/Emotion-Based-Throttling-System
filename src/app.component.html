@@ -1,0 +1,53 @@
+
+<main class="min-h-screen w-full p-4 sm:p-6 lg:p-8 flex flex-col bg-gray-900 text-cyan-300">
+  <header class="w-full text-center pb-4 border-b-2 border-cyan-500/30">
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-widest uppercase">
+      Emotion-Based Throttling System
+    </h1>
+    <p class="text-sm text-gray-400 mt-1">
+      Current State: <span class="font-bold" [style.color]="systemState.currentEmotion().color">{{ systemState.currentEmotion().name }}</span>
+    </p>
+  </header>
+
+  <div class="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 mt-4 sm:mt-6">
+
+    <!-- Left Panel: Controls -->
+    <section class="lg:col-span-3 bg-black/30 border border-cyan-500/30 p-4 rounded-lg flex flex-col">
+      <h2 class="text-xl font-bold mb-4 border-b border-cyan-500/20 pb-2">STATE CONTROLS</h2>
+      <div class="flex flex-col space-y-3">
+        @for (emotion of systemState.emotions(); track emotion.name) {
+          <button
+            (click)="changeEmotion(emotion.name)"
+            [class]="'w-full text-left p-3 rounded-md transition-all duration-300 ease-in-out border-2 flex items-center space-x-3 ' + (systemState.currentEmotion().name === emotion.name ? ' text-gray-900 shadow-lg' : ' border-transparent hover:bg-cyan-500/20 hover:border-cyan-500/50')"
+            [style.background-color]="systemState.currentEmotion().name === emotion.name ? emotion.color : ''"
+            [style.border-color]="systemState.currentEmotion().name === emotion.name ? emotion.color : ''">
+            <span class="text-2xl" [innerHTML]="emotion.icon"></span>
+            <span class="font-semibold">{{ emotion.name }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- Middle Panel: Visualization -->
+    <section class="lg:col-span-6 bg-black/30 border border-cyan-500/30 p-4 rounded-lg flex flex-col">
+      <h2 class="text-xl font-bold mb-4 border-b border-cyan-500/20 pb-2">SYSTEM THROUGHPUT</h2>
+      <div class="flex-grow min-h-[300px] lg:min-h-0">
+        <app-visualizer [performance]="systemState.currentPerformance()" [color]="systemState.currentEmotion().color"></app-visualizer>
+      </div>
+    </section>
+
+    <!-- Right Panel: Logs -->
+    <section class="lg:col-span-3 bg-black/30 border border-cyan-500/30 p-4 rounded-lg flex flex-col">
+      <h2 class="text-xl font-bold mb-4 border-b border-cyan-500/20 pb-2">EVENT LOG</h2>
+      <div #logContainer class="flex-grow overflow-y-auto pr-2 space-y-2 text-sm">
+        @for (log of systemState.logs(); track $index) {
+          <div class="p-2 bg-gray-800/50 rounded-md animate-fade-in">
+            <p class="text-gray-400 text-xs">{{ log.timestamp | date:'HH:mm:ss' }}</p>
+            <p [style.color]="log.color">{{ log.message }}</p>
+          </div>
+        }
+      </div>
+    </section>
+
+  </div>
+</main>

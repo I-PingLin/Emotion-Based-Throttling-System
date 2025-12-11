@@ -1,0 +1,5 @@
+{
+  "name": "Emotion-Based Throttling System",
+  "description": "A futuristic interface to visualize a system that adjusts its processing speed and resource allocation based on different simulated emotional states. Monitor performance metrics as the system adapts to conditions like 'Calm', 'Focused', or 'Stressed'.",
+  "requestFramePermissions": []
+}
